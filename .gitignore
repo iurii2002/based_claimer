@@ -1,0 +1,14 @@
+# exclude system files
+/.idea
+/__pycache__
+/*/__pycache__
+/*/*/__pycache__
+
+# exclude envoironment
+/.based
+
+# exclude keys file
+/files/keys
+
+#exclude logs
+/logs/
