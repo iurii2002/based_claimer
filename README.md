@@ -1,7 +1,8 @@
 # $Based claimer
 
 Script to claim $based tokens. <br />
-It will shuffle accounts and sleep randomly between them. You may change the min/max sleeping time in config file (config.py)
+It will shuffle accounts and sleep randomly between them. You may change the min/max sleeping time in config file (config.py). <br />
+Any wallet with error would be saved in /files/error_waller{timestamp}.txt.
 
 ## How to start?
 - Install Python
