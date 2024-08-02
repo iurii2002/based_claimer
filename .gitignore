@@ -12,3 +12,6 @@
 
 #exclude logs
 /logs/
+
+# test file
+test.py
