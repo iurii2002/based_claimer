@@ -29,7 +29,6 @@ class Requestor:
 
     @staticmethod
     def handle_response(resp) -> dict:
-        print(resp.json())
         if resp.status_code == 200:
             return resp.json()
         else:

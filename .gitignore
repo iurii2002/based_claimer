@@ -9,6 +9,7 @@
 
 # exclude keys file
 /files/keys
+/files/error_wallets*
 
 #exclude logs
 /logs/

@@ -20,7 +20,9 @@ def main_script(account):
         except MakePause as err:
             time.sleep(err.timer)
 
-    client.claim_all_nfts_available()
+    with open(f'files/error_wallets_{int(time.time())}.txt', 'w') as error_wallets:
+        if not client.claim_all_nfts_available():
+            error_wallets.write(f'{client.address}\n')
 
 
 def start_script():
