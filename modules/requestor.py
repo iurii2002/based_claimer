@@ -1,12 +1,15 @@
-from typing import MutableMapping
-
 import requests
+from typing import MutableMapping
+from fake_useragent import UserAgent
 
 
 class Requestor:
     def __init__(self, _endpoint, _headers=None, _proxy=None):
         self.endpoint = _endpoint
         self.session = requests.Session()
+        self.update_headers({
+            'User-Agent': UserAgent().random,
+        })
         if _headers:
             self.update_headers(_headers)
         if _proxy:
@@ -26,6 +29,7 @@ class Requestor:
 
     @staticmethod
     def handle_response(resp) -> dict:
+        print(resp.json())
         if resp.status_code == 200:
             return resp.json()
         else:

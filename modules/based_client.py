@@ -1,3 +1,5 @@
+import time
+
 from hexbytes import HexBytes
 from loguru import logger
 from web3 import Web3
@@ -29,7 +31,7 @@ class BasedClient:
         """
         self.available_for_claim = self.api.check_eligibility(self.owned_nfts)
 
-    def sign_message(self, nonce, timestamp) -> HexBytes:
+    def sign_message(self, nonce, timestamp) -> str:
         """
         Signs authorization message
         :param nonce: nonce to be used in message
@@ -40,17 +42,17 @@ class BasedClient:
         logger.info(f'Signing message:{msggg}')
         message = encode_defunct(text=msggg)
         signed_message = self.account.sign_message(message)
-        return signed_message.signature
+        return signed_message.signature.hex()
 
-    def claim_all_nfts_available(self) -> None:
+    def claim_all_nfts_available(self) -> bool:
         """
         Claims tokens from all available nfts to claim $based
-        :return: None
+        :return: True if claimed or nothing to claim, false if not
         """
         self.get_available_for_claim_nfts()
         if len(self.available_for_claim) == 0:
             logger.info('There is nothing to claim')
-            return
+            return True
         logger.info(f'{self.address} has {self.available_for_claim} nfts to claim')
 
         nonce_timestamp = self.api.get_nonce_and_timestamp()
@@ -59,7 +61,9 @@ class BasedClient:
         logger.info('Sending message to server')
 
         if self.api.send_message(nonce=nonce, timestamp=timestamp, signature=signed_message,
-                                 nft_id=self.available_for_claim):
+                                 nft_id=self.available_for_claim) == 'success':
             logger.success(f'Successfully claimed token fot nfts {self.available_for_claim}')
+            return True
         else:
             logger.error(f'Could not claim tokens for nfts {self.available_for_claim}')
+            return False
