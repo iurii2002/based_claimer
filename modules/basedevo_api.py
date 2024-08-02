@@ -2,7 +2,7 @@ import json
 import requests
 
 from loguru import logger
-from eth_account.account import ChecksumAddress, HexBytes
+from eth_account.account import ChecksumAddress
 
 from modules.helpful_scripts import MakePause
 from modules.requestor import Requestor

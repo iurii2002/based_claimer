@@ -1,6 +1,3 @@
-import time
-
-from hexbytes import HexBytes
 from loguru import logger
 from web3 import Web3
 from eth_account.signers.local import LocalAccount
