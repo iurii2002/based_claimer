@@ -1,10 +1,10 @@
 import datetime
 from sys import stderr
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import List
 
 from loguru import logger
-from web3 import Account, Web3
+from web3 import Account
 from eth_account.signers.local import LocalAccount
 
 from config import log_file
