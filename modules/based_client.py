@@ -59,7 +59,7 @@ class BasedClient:
 
         if self.api.send_message(nonce=nonce, timestamp=timestamp, signature=signed_message,
                                  nft_id=self.available_for_claim) == 'success':
-            logger.success(f'Successfully claimed token fot nfts {self.available_for_claim}')
+            logger.success(f'Successfully claimed token for nfts {self.available_for_claim}')
             return True
         else:
             logger.error(f'Could not claim tokens for nfts {self.available_for_claim}')
