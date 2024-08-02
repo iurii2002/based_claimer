@@ -14,5 +14,8 @@
 #exclude logs
 /logs/
 
+#exclude errors
+/errors/
+
 # test file
 test.py

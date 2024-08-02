@@ -20,9 +20,7 @@ def main_script(account):
         except MakePause as err:
             time.sleep(err.timer)
 
-    with open(f'files/error_wallets_{int(time.time())}.txt', 'w') as error_wallets:
-        if not client.claim_all_nfts_available():
-            error_wallets.write(f'{client.address}\n')
+    return client.claim_all_nfts_available()
 
 
 def start_script():
@@ -35,24 +33,29 @@ def start_script():
     time.sleep(1)
 
     random.shuffle(accounts)
-    for account in accounts:
+    with open(f'errors/error_wallets_{int(time.time())}.txt', 'w') as error_wallets:
+        for account in accounts:
 
-        load_logger()
+            load_logger()
 
-        logger.info(f'Started for wallet {account.address}')
-        random_sleep = random.randint(*sleep_between_accounts)
+            logger.info(f'Started for wallet {account.address}')
+            random_sleep = random.randint(*sleep_between_accounts)
 
-        try:
-            main_script(account=account)
-        except requests.exceptions.ConnectionError as err:
-            logger.info(f'ConnectionError: {err}')
-        except ValueError as value:
-            logger.info(f'ValueError: {value}')
-        except Exception as err:
-            logger.error(f'Something went wrong with account {account.address} : {err}')
+            try:
+                try:
+                    if not main_script(account=account):
+                        error_wallets.write(f'{account.address}\n')
+                except requests.exceptions.ConnectionError as err:
+                    logger.info(f'ConnectionError: {err}')
+                except ValueError as value:
+                    logger.info(f'ValueError: {value}')
+                except Exception as err:
+                    logger.error(f'Something went wrong with account {account.address} : {err}')
+            except:
+                error_wallets.write(f'{account.address}\n')
 
-        logger.info(f"Sleeping for {random_sleep} seconds")
-        time.sleep(random_sleep)
+            logger.info(f"Sleeping for {random_sleep} seconds")
+            time.sleep(random_sleep)
 
 
 if __name__ == '__main__':

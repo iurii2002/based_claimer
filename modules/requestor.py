@@ -32,7 +32,7 @@ class Requestor:
         if resp.status_code == 200:
             return resp.json()
         else:
-            raise ConnectionError(resp.status_code)
+            raise requests.exceptions.ConnectionError(resp.status_code)
 
     def get_request(self, url, data=None, json=None) -> dict:
         return self.handle_response(self.session.get(url=url, data=data, json=json, timeout=10))
