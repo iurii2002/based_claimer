@@ -1,6 +1,7 @@
 # $Based claimer
 
 Script to claim $based tokens
+It will shuffle accounts and sleep randomly between them. You may change the min/max sleeping time in config file
 
 ## How to start?
 - Install Python
