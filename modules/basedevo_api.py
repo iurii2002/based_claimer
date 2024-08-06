@@ -7,7 +7,7 @@ from eth_account.account import ChecksumAddress
 from modules.helpful_scripts import MakePause
 from modules.requestor import Requestor
 
-endpoint = 'https://basedevo.fun/api/'
+
 headers = {
     'Origin': 'https://basedevo.fun',
     'Referer': 'https://basedevo.fun/'
@@ -16,7 +16,8 @@ headers = {
 
 class BasedApi(Requestor):
     def __init__(self, address: ChecksumAddress):
-        super().__init__(endpoint, _headers=headers)
+        super().__init__(_headers=headers)
+        self.endpoint = 'https://basedevo.fun/api/'
         self.address = address
 
     def get_owned_nfts_number(self) -> list[str]:
