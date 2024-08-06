@@ -4,8 +4,7 @@ from fake_useragent import UserAgent
 
 
 class Requestor:
-    def __init__(self, _endpoint, _headers=None, _proxy=None):
-        self.endpoint = _endpoint
+    def __init__(self, _headers=None, _proxy=None):
         self.session = requests.Session()
         self.update_headers({
             'User-Agent': UserAgent().random,
