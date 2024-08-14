@@ -10,17 +10,8 @@ from modules.based_client import BasedClient
 
 def main_script(account):
     client = BasedClient(account=account)
-
-    # updating data
-    success = False
-    while not success:
-        try:
-            client.get_owned_nfts()
-            success = True
-        except MakePause as err:
-            time.sleep(err.timer)
-
-    return client.claim_all_nfts_available()
+    # claiming tokens
+    return client.claim_tokens()
 
 
 def start_script():

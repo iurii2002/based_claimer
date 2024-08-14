@@ -1,8 +1,11 @@
+import json
+from pathlib import Path
 from loguru import logger
 from web3 import Web3
 from eth_account.signers.local import LocalAccount
 from eth_account.messages import encode_defunct
 from modules.basedevo_api import BasedApi
+from modules.helpful_scripts import send_transaction, check_tx_status
 
 
 class BasedClient:
@@ -10,9 +13,13 @@ class BasedClient:
         self.account = account
         self.address = self.account.address
         self.api = BasedApi(self.address)
-        self.w3 = Web3(Web3.HTTPProvider('localhost'))
+        self.w3 = Web3(Web3.HTTPProvider('https://mainnet.base.org'))
         self.owned_nfts = None
         self.available_for_claim = None
+        self.based_contract = self.w3.eth.contract(
+            address=Web3.to_checksum_address('0x32E0f9d26D1e33625742A52620cC76C1130efde6'),
+            abi=json.load(Path('files/based_abi.json').open())
+        )
 
     def get_owned_nfts(self) -> None:
         """
@@ -64,3 +71,25 @@ class BasedClient:
         else:
             logger.error(f'Could not claim tokens for nfts {self.available_for_claim}')
             return False
+
+    def get_tokens_claimable_amount(self) -> int:
+        """
+        :return: Amount of claimable tokens
+        """
+        return self.based_contract.functions.tokensClaimable(self.address).call()
+
+    def claim_tokens(self):
+        """
+        Claims all available tokens
+        :return: True if claimed or nothing to claim, False if not
+        """
+        if self.get_tokens_claimable_amount() == 0:
+            logger.info('Has nothing to claim')
+            return True
+        raw_tx = self.based_contract.functions.claim()
+        tx_hash = send_transaction(raw_tx=raw_tx, w3=self.w3, explorer='https://basescan.org/', account=self.account,
+                                   eip1559=True)
+        if check_tx_status(w3=self.w3, tx_hash=tx_hash):
+            return True
+        logger.error('Something went wrong while claiming tokens')
+        raise False
